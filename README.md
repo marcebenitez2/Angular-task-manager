@@ -78,22 +78,31 @@ prueba-angular
 │  │  ├─ app.config.ts
 │  │  ├─ app.routes.ts
 │  │  ├─ core
+│  │  │  ├─ guards
+│  │  │  │  └─ auth.guard.ts
+│  │  │  ├─ interceptors
+│  │  │  │  └─ auth.interceptor.ts
 │  │  │  ├─ models
-│  │  │  │  └─ auth.model.ts
+│  │  │  │  ├─ auth.model.ts
+│  │  │  │  └─ project.model.ts
 │  │  │  └─ services
 │  │  │     ├─ auth.service.spec.ts
-│  │  │     └─ auth.service.ts
+│  │  │     ├─ auth.service.ts
+│  │  │     └─ project.service.ts
 │  │  ├─ features
 │  │  │  ├─ auth
 │  │  │  │  ├─ auth.routes.ts
-│  │  │  │  └─ login
-│  │  │  │     ├─ login.component.css
-│  │  │  │     ├─ login.component.spec.ts
-│  │  │  │     └─ login.component.ts
+│  │  │  │  ├─ login
+│  │  │  │  │  ├─ login.component.css
+│  │  │  │  │  ├─ login.component.spec.ts
+│  │  │  │  │  └─ login.component.ts
+│  │  │  │  └─ register
+│  │  │  │     └─ register.component.ts
 │  │  │  └─ projects
+│  │  │     ├─ project-form
+│  │  │     │  └─ project-form.component.ts
 │  │  │     ├─ project-list
 │  │  │     │  ├─ project-list.component.css
-│  │  │     │  ├─ project-list.component.html
 │  │  │     │  ├─ project-list.component.spec.ts
 │  │  │     │  └─ project-list.component.ts
 │  │  │     └─ projects.routes.ts

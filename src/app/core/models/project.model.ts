@@ -1,6 +1,8 @@
-// src/app/core/models/project.model.ts
 export interface Project {
-    id: string;
-    name: string;
-    description: string;
-  }
+  _id: string;
+  name: string;
+  description: string;
+  status: 'active' | 'completed' | 'on-hold';
+  createdAt: string;
+  updatedAt: string;
+}
