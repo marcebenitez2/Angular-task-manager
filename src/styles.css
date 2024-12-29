@@ -1,1 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+/* styles.css */
+@use '@angular/material' as mat;
+
+:root {
+  --primary-color: #00bcd4;
+  --accent-color: #ff9800;
+}
+
+html, body { 
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+body {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+/* Estilos globales para Material */
+.mat-mdc-card {
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+}
+
+.mat-mdc-form-field {
+  color: #ffffff !important;
+}
+
+.mat-mdc-card-subtitle {
+  color: #cccccc !important;
+}

@@ -57,3 +57,59 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+```
+prueba-angular
+├─ .angular
+├─ .editorconfig
+├─ angular.json
+├─ package-lock.json
+├─ package.json
+├─ public
+│  └─ favicon.ico
+├─ README.md
+├─ src
+│  ├─ app
+│  │  ├─ app.component.css
+│  │  ├─ app.component.html
+│  │  ├─ app.component.spec.ts
+│  │  ├─ app.component.ts
+│  │  ├─ app.config.ts
+│  │  ├─ app.routes.ts
+│  │  ├─ core
+│  │  │  ├─ models
+│  │  │  │  └─ auth.model.ts
+│  │  │  └─ services
+│  │  │     ├─ auth.service.spec.ts
+│  │  │     └─ auth.service.ts
+│  │  ├─ features
+│  │  │  ├─ auth
+│  │  │  │  ├─ auth.routes.ts
+│  │  │  │  └─ login
+│  │  │  │     ├─ login.component.css
+│  │  │  │     ├─ login.component.spec.ts
+│  │  │  │     └─ login.component.ts
+│  │  │  └─ projects
+│  │  │     ├─ project-list
+│  │  │     │  ├─ project-list.component.css
+│  │  │     │  ├─ project-list.component.html
+│  │  │     │  ├─ project-list.component.spec.ts
+│  │  │     │  └─ project-list.component.ts
+│  │  │     └─ projects.routes.ts
+│  │  └─ shared
+│  │     └─ not-found
+│  │        ├─ not-found.component.css
+│  │        ├─ not-found.component.html
+│  │        ├─ not-found.component.spec.ts
+│  │        └─ not-found.component.ts
+│  ├─ environments
+│  │  └─ environment.ts
+│  ├─ index.html
+│  ├─ main.ts
+│  └─ styles.css
+├─ tsconfig.app.json
+├─ tsconfig.json
+└─ tsconfig.spec.json
+
+```
