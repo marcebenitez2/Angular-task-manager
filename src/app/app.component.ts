@@ -20,6 +20,7 @@ import { AuthService } from './core/services/auth.service';
       <span class="title">Project Management</span>
       <span class="spacer"></span>
       <ng-container *ngIf="isLoggedIn$ | async; else loginButton">
+        <button mat-button routerLink="/projects">Proyectos</button>
         <button mat-button (click)="logout()">Cerrar Sesión</button>
       </ng-container>
       <ng-template #loginButton>

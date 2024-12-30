@@ -23,6 +23,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskEditDialogComponent } from '../../tasks/task-edit-dialog/task-edit-dialog.component';
 
 import { ProjectService } from '../../../core/services/project.service';
 import { TaskService } from '../../../core/services/task.service';
@@ -90,7 +92,98 @@ import { MatIconModule } from '@angular/material/icon';
             }
           </div>
         </div>
+        
+        <!-- Formulario Nueva Tarea -->
+        @if (isProjectOwner || isMember) {
+        <div class="p-8 bg-gray-900 border-b border-gray-700">
+          <h2
+            class="text-2xl font-semibold mb-6 text-cyan-400 flex items-center"
+          >
+            <mat-icon class="mr-2 text-cyan-400">add_task</mat-icon>
+            Nueva Tarea
+          </h2>
 
+          <form
+            [formGroup]="taskForm"
+            (ngSubmit)="onSubmitTask()"
+            class="space-y-6"
+          >
+            <mat-form-field class="w-full" floatLabel="always">
+              <mat-label>Título de la Tarea</mat-label>
+              <input
+                matInput
+                formControlName="title"
+                placeholder="Ingrese el título"
+                class="text-gray-200"
+              />
+            </mat-form-field>
+
+            <mat-form-field class="w-full" floatLabel="always">
+              <mat-label>Descripción</mat-label>
+              <textarea
+                matInput
+                formControlName="description"
+                rows="4"
+                placeholder="Describe la tarea en detalle"
+                class="text-gray-200"
+              ></textarea>
+            </mat-form-field>
+
+            <mat-form-field class="w-full" floatLabel="always">
+              <mat-label>Estado</mat-label>
+              <mat-select formControlName="status" class="text-gray-200">
+                <mat-option value="pending">Pendiente</mat-option>
+                <mat-option value="in_progress">En Progreso</mat-option>
+                <mat-option value="completed">Completado</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-full" floatLabel="always">
+              <mat-label>Asignar a</mat-label>
+              <mat-select
+                formControlName="assignedTo"
+                multiple
+                class="text-gray-200"
+              >
+                @for (user of projectMembers; track user._id) {
+                <mat-option [value]="user._id">
+                  {{ user.username }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-full" floatLabel="always">
+              <mat-label>Fecha límite</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="dueDate"
+                placeholder="Seleccione una fecha"
+                class="text-gray-200"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <div class="flex justify-end">
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="taskForm.invalid"
+                class="px-8 bg-cyan-600 hover:bg-cyan-700"
+              >
+                <mat-icon class="mr-2">add</mat-icon>
+                Crear Tarea
+              </button>
+            </div>
+          </form>
+        </div>
+        }
         <!-- Lista de Tareas con Drag and Drop -->
         <div class="p-8">
           <h2
@@ -124,9 +217,27 @@ import { MatIconModule } from '@angular/material/icon';
                 >
                   <!-- Contenido de la tarea -->
                   <div class="task-content">
-                    <h4 class="text-lg font-medium text-cyan-400">
-                      {{ task.title }}
-                    </h4>
+                    <div class="flex justify-between items-start mb-2">
+                      <h4 class="text-lg font-medium text-cyan-400">
+                        {{ task.title }}
+                      </h4>
+                      <div class="flex gap-2">
+                        <button
+                          mat-icon-button
+                          (click)="openEditDialog(task)"
+                          class="text-cyan-400 hover:text-cyan-300"
+                        >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button
+                          mat-icon-button
+                          (click)="deleteTask(task._id)"
+                          class="text-red-400 hover:text-red-300"
+                        >
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
                     <p class="text-gray-300 text-sm mt-2">
                       {{ task.description }}
                     </p>
@@ -247,97 +358,6 @@ import { MatIconModule } from '@angular/material/icon';
           </div>
         </div>
 
-        <!-- Formulario Nueva Tarea -->
-        @if (isProjectOwner || isMember) {
-        <div class="p-8 bg-gray-900 border-b border-gray-700">
-          <h2
-            class="text-2xl font-semibold mb-6 text-cyan-400 flex items-center"
-          >
-            <mat-icon class="mr-2 text-cyan-400">add_task</mat-icon>
-            Nueva Tarea
-          </h2>
-
-          <form
-            [formGroup]="taskForm"
-            (ngSubmit)="onSubmitTask()"
-            class="space-y-6"
-          >
-            <mat-form-field class="w-full" floatLabel="always">
-              <mat-label>Título de la Tarea</mat-label>
-              <input
-                matInput
-                formControlName="title"
-                placeholder="Ingrese el título"
-                class="text-gray-200"
-              />
-            </mat-form-field>
-
-            <mat-form-field class="w-full" floatLabel="always">
-              <mat-label>Descripción</mat-label>
-              <textarea
-                matInput
-                formControlName="description"
-                rows="4"
-                placeholder="Describe la tarea en detalle"
-                class="text-gray-200"
-              ></textarea>
-            </mat-form-field>
-
-            <mat-form-field class="w-full" floatLabel="always">
-              <mat-label>Estado</mat-label>
-              <mat-select formControlName="status" class="text-gray-200">
-                <mat-option value="pending">Pendiente</mat-option>
-                <mat-option value="in_progress">En Progreso</mat-option>
-                <mat-option value="completed">Completado</mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field class="w-full" floatLabel="always">
-              <mat-label>Asignar a</mat-label>
-              <mat-select
-                formControlName="assignedTo"
-                multiple
-                class="text-gray-200"
-              >
-                @for (user of projectMembers; track user._id) {
-                <mat-option [value]="user._id">
-                  {{ user.username }}
-                </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field class="w-full" floatLabel="always">
-              <mat-label>Fecha límite</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker"
-                formControlName="dueDate"
-                placeholder="Seleccione una fecha"
-                class="text-gray-200"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="picker"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-
-            <div class="flex justify-end">
-              <button
-                mat-raised-button
-                color="primary"
-                type="submit"
-                [disabled]="taskForm.invalid"
-                class="px-8 bg-cyan-600 hover:bg-cyan-700"
-              >
-                <mat-icon class="mr-2">add</mat-icon>
-                Crear Tarea
-              </button>
-            </div>
-          </form>
-        </div>
-        }
       </div>
     </div>
     } @else {
@@ -366,7 +386,8 @@ export class ProjectDetailComponent implements OnInit {
     private projectService: ProjectService,
     private taskService: TaskService,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {
     this.taskForm = this.fb.group({
       title: ['', Validators.required],
@@ -451,22 +472,10 @@ export class ProjectDetailComponent implements OnInit {
             status: 'pending',
             assignedTo: [],
           });
+          window.location.reload();
         },
         error: (error) => {
           console.error('Error al crear la tarea:', error);
-        },
-      });
-    }
-  }
-
-  deleteTask(taskId: string) {
-    if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
-      this.taskService.deleteTask(taskId).subscribe({
-        next: () => {
-          this.tasks = this.tasks.filter((task) => task._id !== taskId);
-        },
-        error: (error) => {
-          console.error('Error al eliminar la tarea:', error);
         },
       });
     }
@@ -543,6 +552,82 @@ export class ProjectDetailComponent implements OnInit {
         return 'completed';
       default:
         return 'pending';
+    }
+  }
+
+  openEditDialog(task: Task) {
+    const dialogRef = this.dialog.open(TaskEditDialogComponent, {
+      width: '500px',
+      data: task,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Mantener el status actual
+        const updatedTask: Partial<Task> = {
+          ...result,
+          status: task.status,
+          assignedTo: task.assignedTo,
+        };
+
+        this.taskService.updateTask(task._id, updatedTask).subscribe({
+          next: (response) => {
+            // Crear una nueva tarea combinando la original con los cambios
+            const updatedTaskComplete = {
+              ...task,
+              title: result.title,
+              description: result.description,
+              dueDate: result.dueDate,
+            };
+
+            // Actualizar la tarea en la lista correspondiente
+            switch (task.status) {
+              case 'pending':
+                this.pendingTasks = this.pendingTasks.map((t) =>
+                  t._id === task._id ? updatedTaskComplete : t
+                );
+                break;
+              case 'in_progress':
+                this.inProgressTasks = this.inProgressTasks.map((t) =>
+                  t._id === task._id ? updatedTaskComplete : t
+                );
+                break;
+              case 'completed':
+                this.completedTasks = this.completedTasks.map((t) =>
+                  t._id === task._id ? updatedTaskComplete : t
+                );
+                break;
+            }
+          },
+          error: (error) => {
+            console.error('Error al actualizar la tarea:', error);
+            // Aquí podrías agregar una notificación de error si lo deseas
+          },
+        });
+      }
+    });
+  }
+
+  // Update the existing deleteTask method
+  deleteTask(taskId: string) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
+      this.taskService.deleteTask(taskId).subscribe({
+        next: () => {
+          // Remover la tarea de todas las listas
+          this.pendingTasks = this.pendingTasks.filter(
+            (task) => task._id !== taskId
+          );
+          this.inProgressTasks = this.inProgressTasks.filter(
+            (task) => task._id !== taskId
+          );
+          this.completedTasks = this.completedTasks.filter(
+            (task) => task._id !== taskId
+          );
+        },
+        error: (error) => {
+          console.error('Error al eliminar la tarea:', error);
+        },
+      });
     }
   }
 }
