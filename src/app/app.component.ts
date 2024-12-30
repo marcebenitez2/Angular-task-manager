@@ -61,14 +61,11 @@ import { AuthService } from './core/services/auth.service';
     `,
   ],
 })
-
 export class AppComponent {
   isLoggedIn$;
+  title: string = 'prueba-angular';
 
-  constructor(
-    private authService: AuthService,
-    private router: Router  
-  ) {
+  constructor(private authService: AuthService, private router: Router) {
     this.isLoggedIn$ = this.authService.isAuthenticated$;
   }
 

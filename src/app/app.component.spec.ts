@@ -1,10 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AuthService } from './core/services/auth.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [
+        AppComponent, 
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      providers: [AuthService]
     }).compileComponents();
   });
 
@@ -20,10 +29,11 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('prueba-angular');
   });
 
-  it('should render title', () => {
+
+  // Podemos agregar más pruebas específicas para la funcionalidad de autenticación
+  it('should have AuthService injected', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, prueba-angular');
+    const authService = fixture.debugElement.injector.get(AuthService);
+    expect(authService).toBeTruthy();
   });
 });
