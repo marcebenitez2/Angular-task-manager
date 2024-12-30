@@ -40,7 +40,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
         <mat-card-content>
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-            <mat-form-field appearance="outline">
+            <mat-form-field>
               <mat-label>Nombre de usuario</mat-label>
               <input
                 matInput
@@ -55,7 +55,7 @@ import { AuthService } from '../../../core/services/auth.service';
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
+            <mat-form-field >
               <mat-label>Email</mat-label>
               <input
                 matInput
@@ -74,7 +74,7 @@ import { AuthService } from '../../../core/services/auth.service';
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
+            <mat-form-field>
               <mat-label>Contraseña</mat-label>
               <input
                 matInput

@@ -13,7 +13,7 @@ import {
 })
 export class AuthService {
   private readonly API_URL = environment.apiUrl;
-  private userSubject = new BehaviorSubject<AuthResponse['user'] | null>(null);
+  private userSubject = new BehaviorSubject<AuthResponse['user']>({ id: '', email: '', name: '' });
   user$ = this.userSubject.asObservable();
 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(
@@ -52,11 +52,15 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    this.userSubject.next(null);
+    this.userSubject.next({ id: '', email: '', name: '' });
     this.isAuthenticatedSubject.next(false);
   }
 
   isAuthenticated(): boolean {
     return !!localStorage.getItem('token');
+  }
+
+  getCurrentUser(): Observable<AuthResponse['user']> {
+    return this.user$;
   }
 }
