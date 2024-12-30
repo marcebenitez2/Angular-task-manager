@@ -31,7 +31,7 @@ import { ProjectService } from '../../../core/services/project.service';
         
         <mat-card-content>
           <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
-            <mat-form-field appearance="outline">
+            <mat-form-field >
               <mat-label>Nombre del Proyecto</mat-label>
               <input matInput formControlName="name" placeholder="Ingresa el nombre">
               <mat-error *ngIf="projectForm.get('name')?.errors?.['required']">
@@ -39,7 +39,7 @@ import { ProjectService } from '../../../core/services/project.service';
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
+            <mat-form-field >
               <mat-label>Descripción</mat-label>
               <textarea matInput formControlName="description" 
                         placeholder="Describe tu proyecto"

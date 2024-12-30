@@ -14,6 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +29,8 @@ import { AuthService } from '../../../core/services/auth.service';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatSnackBarModule,
+    MatProgressSpinner,
   ],
   template: `
     <div class="login-container">
@@ -69,7 +73,7 @@ import { AuthService } from '../../../core/services/auth.service';
               <mat-error
                 *ngIf="loginForm.get('password')?.errors?.['required']"
               >
-              La contraseña es requerida
+                La contraseña es requerida
               </mat-error>
             </mat-form-field>
 
@@ -77,10 +81,11 @@ import { AuthService } from '../../../core/services/auth.service';
               mat-raised-button
               color="primary"
               type="submit"
-              [disabled]="loginForm.invalid"
+              [disabled]="loginForm.invalid || isLoading"
               class="submit-button"
             >
-              Sign In
+              <span *ngIf="!isLoading">Iniciar sesión</span>
+              <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
             </button>
           </form>
 
@@ -180,11 +185,13 @@ import { AuthService } from '../../../core/services/auth.service';
 export class LoginComponent {
   loginForm: FormGroup;
   hidePassword = true;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService, // Agregamos AuthService
-    private router: Router // Agregamos Router
+    private authService: AuthService,
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -194,13 +201,26 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.isLoading = true;
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
+          this.isLoading = false;
           this.router.navigate(['/projects']);
         },
         error: (error) => {
-          console.error('Error en el login:', error);
-          // Aquí podrías agregar un manejo de errores más elaborado
+          this.isLoading = false;
+          let errorMessage = 'Error al iniciar sesión';
+
+          if (error.status === 401) {
+            errorMessage = 'Email o contraseña incorrectos';
+          }
+
+          this.snackBar.open(errorMessage, 'Cerrar', {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
         },
       });
     }

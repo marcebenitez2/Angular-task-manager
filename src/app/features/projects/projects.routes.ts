@@ -2,7 +2,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../../core/guards/auth.guard';
 
-
 export const projectRoutes: Routes = [
   {
     path: '',
@@ -25,12 +24,12 @@ export const projectRoutes: Routes = [
         (m) => m.ProjectDetailComponent
       ),
   },
-  // {
-  //   path: ':id/edit',
-  //   loadComponent: () =>
-  //     import('./project-form/project-form.component').then(
-  //       (m) => m.ProjectFormComponent
-  //     ),
-  //   canActivate: [authGuard],
-  // },
+  {
+    path: ':id/edit',
+    loadComponent: () =>
+      import('./project-edit/project-edit.component').then(
+        (m) => m.ProjectEditComponent
+      ),
+    canActivate: [authGuard],
+  },
 ];
