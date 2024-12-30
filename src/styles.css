@@ -1,5 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 /* styles.css */
 @use '@angular/material' as mat;
+@include mat.core();
+
 
 :root {
   --primary-color: #00bcd4;
@@ -30,3 +35,13 @@ body {
 .mat-mdc-card-subtitle {
   color: #cccccc !important;
 }
+
+input {
+  color: #ffffff !important;
+}
+
+mat-label {
+  color: #cccccc !important;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
