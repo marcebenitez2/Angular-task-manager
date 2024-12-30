@@ -207,20 +207,8 @@ export class LoginComponent {
           this.isLoading = false;
           this.router.navigate(['/projects']);
         },
-        error: (error) => {
+        error: () => {
           this.isLoading = false;
-          let errorMessage = 'Error al iniciar sesión';
-
-          if (error.status === 401) {
-            errorMessage = 'Email o contraseña incorrectos';
-          }
-
-          this.snackBar.open(errorMessage, 'Cerrar', {
-            duration: 5000,
-            panelClass: ['error-snackbar'],
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-          });
         },
       });
     }
