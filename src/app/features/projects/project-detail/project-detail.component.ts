@@ -24,8 +24,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
-import { TaskEditDialogComponent } from '../../tasks/task-edit-dialog/task-edit-dialog.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
+import { TaskEditDialogComponent } from '../../tasks/task-edit-dialog/task-edit-dialog.component';
 import { ProjectService } from '../../../core/services/project.service';
 import { TaskService } from '../../../core/services/task.service';
 import { UserService } from '../../../core/services/users.service';
@@ -52,6 +53,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
     MatProgressSpinnerModule,
     DragDropModule,
+    MatExpansionModule,
   ],
   template: `
     @if (project) {
@@ -92,7 +94,7 @@ import { MatIconModule } from '@angular/material/icon';
             }
           </div>
         </div>
-        
+
         <!-- Formulario Nueva Tarea -->
         @if (isProjectOwner || isMember) {
         <div class="p-8 bg-gray-900 border-b border-gray-700">
@@ -193,6 +195,62 @@ import { MatIconModule } from '@angular/material/icon';
             Lista de Tareas
           </h2>
 
+          <mat-expansion-panel class="bg-gray-800 mb-6">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="text-cyan-400">
+                <mat-icon class="mr-2">filter_list</mat-icon>
+                Filtros
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+              <!-- Filtro de Estado -->
+              <mat-form-field class="w-full">
+                <mat-label>Estado</mat-label>
+                <mat-select
+                  [(ngModel)]="statusFilter"
+                  (selectionChange)="applyFilters()"
+                >
+                  <mat-option value="all">Todos</mat-option>
+                  <mat-option value="pending">Pendientes</mat-option>
+                  <mat-option value="in_progress">En Progreso</mat-option>
+                  <mat-option value="completed">Completados</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Filtro de Usuario Asignado -->
+              <mat-form-field class="w-full">
+                <mat-label>Usuario Asignado</mat-label>
+                <mat-select
+                  [(ngModel)]="assignedToFilter"
+                  multiple
+                  (selectionChange)="applyFilters()"
+                >
+                  <mat-option value="all">Todos</mat-option>
+                  @for (user of projectMembers; track user._id) {
+                  <mat-option [value]="user._id">{{
+                    user.username
+                  }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Filtro de Fecha de Vencimiento -->
+              <mat-form-field class="w-full">
+                <mat-label>Fecha de Vencimiento</mat-label>
+                <mat-select
+                  [(ngModel)]="dueDateFilter"
+                  (selectionChange)="applyFilters()"
+                >
+                  <mat-option value="all">Todas</mat-option>
+                  <mat-option value="overdue">Vencidas</mat-option>
+                  <mat-option value="upcoming">Próximos 7 días</mat-option>
+                  <mat-option value="future">Futuras</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Columna Pendientes -->
             <div class="bg-gray-800 rounded-lg p-4">
@@ -205,12 +263,12 @@ import { MatIconModule } from '@angular/material/icon';
               <div
                 cdkDropList
                 #pendingList="cdkDropList"
-                [cdkDropListData]="pendingTasks"
+                [cdkDropListData]="filteredPendingTasks"
                 [cdkDropListConnectedTo]="[inProgressList, completedList]"
                 class="min-h-[200px] space-y-4"
                 (cdkDropListDropped)="drop($event)"
               >
-                @for (task of pendingTasks; track task._id) {
+                @for (task of filteredPendingTasks; track task._id) {
                 <div
                   cdkDrag
                   class="border border-gray-700 rounded-lg p-4 bg-gray-750 cursor-move hover:bg-gray-700 transition-all"
@@ -271,12 +329,12 @@ import { MatIconModule } from '@angular/material/icon';
               <div
                 cdkDropList
                 #inProgressList="cdkDropList"
-                [cdkDropListData]="inProgressTasks"
+                [cdkDropListData]="filteredInProgressTasks"
                 [cdkDropListConnectedTo]="[pendingList, completedList]"
                 class="min-h-[200px] space-y-4"
                 (cdkDropListDropped)="drop($event)"
               >
-                @for (task of inProgressTasks; track task._id) {
+                @for (task of filteredInProgressTasks; track task._id) {
                 <div
                   cdkDrag
                   class="border border-gray-700 rounded-lg p-4 bg-gray-750 cursor-move hover:bg-gray-700 transition-all"
@@ -319,12 +377,12 @@ import { MatIconModule } from '@angular/material/icon';
               <div
                 cdkDropList
                 #completedList="cdkDropList"
-                [cdkDropListData]="completedTasks"
+                [cdkDropListData]="filteredCompletedTasks"
                 [cdkDropListConnectedTo]="[pendingList, inProgressList]"
                 class="min-h-[200px] space-y-4"
                 (cdkDropListDropped)="drop($event)"
               >
-                @for (task of completedTasks; track task._id) {
+                @for (task of filteredCompletedTasks; track task._id) {
                 <div
                   cdkDrag
                   class="border border-gray-700 rounded-lg p-4 bg-gray-750 cursor-move hover:bg-gray-700 transition-all"
@@ -357,7 +415,6 @@ import { MatIconModule } from '@angular/material/icon';
             </div>
           </div>
         </div>
-
       </div>
     </div>
     } @else {
@@ -378,6 +435,12 @@ export class ProjectDetailComponent implements OnInit {
   pendingTasks: Task[] = [];
   inProgressTasks: Task[] = [];
   completedTasks: Task[] = [];
+  statusFilter: string = 'all';
+  assignedToFilter: string[] = [];
+  dueDateFilter: 'all' | 'overdue' | 'upcoming' | 'future' = 'all';
+  filteredPendingTasks: Task[] = [];
+  filteredInProgressTasks: Task[] = [];
+  filteredCompletedTasks: Task[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -443,18 +506,74 @@ export class ProjectDetailComponent implements OnInit {
     this.taskService.getTasksByProject(projectId).subscribe({
       next: (tasks) => {
         this.tasks = tasks;
-        // Distribuir las tareas en las columnas correspondientes
         this.pendingTasks = tasks.filter((task) => task.status === 'pending');
-        this.inProgressTasks = tasks.filter(
-          (task) => task.status === 'in_progress'
-        );
-        this.completedTasks = tasks.filter(
-          (task) => task.status === 'completed'
-        );
+        this.inProgressTasks = tasks.filter((task) => task.status === 'in_progress');
+        this.completedTasks = tasks.filter((task) => task.status === 'completed');
+        
+        // Aplicar filtros después de cargar las tareas
+        this.applyFilters();
+        
+        console.log('Tareas cargadas y filtradas');
       },
       error: (error) => {
         console.error('Error al cargar las tareas:', error);
       },
+    });
+  }
+
+  applyFilters() {
+    console.log('Aplicando filtros...'); // Para debugging
+
+    // Filtrar tareas pendientes
+    this.filteredPendingTasks = this.filterTasks(this.pendingTasks);
+    console.log('Tareas pendientes filtradas:', this.filteredPendingTasks);
+
+    // Filtrar tareas en progreso
+    this.filteredInProgressTasks = this.filterTasks(this.inProgressTasks);
+    console.log('Tareas en progreso filtradas:', this.filteredInProgressTasks);
+
+    // Filtrar tareas completadas
+    this.filteredCompletedTasks = this.filterTasks(this.completedTasks);
+    console.log('Tareas completadas filtradas:', this.filteredCompletedTasks);
+  }
+
+  private filterTasks(tasks: Task[]): Task[] {
+    return tasks.filter((task) => {
+      // Filtro por estado
+      if (this.statusFilter !== 'all' && task.status !== this.statusFilter) {
+        return false;
+      }
+
+      // Filtro por usuario asignado
+      if (
+        this.assignedToFilter.length > 0 &&
+        !this.assignedToFilter.includes('all')
+      ) {
+        if (
+          !task.assignedTo.some((userId) =>
+            this.assignedToFilter.includes(userId)
+          )
+        ) {
+          return false;
+        }
+      }
+
+      // Filtro por fecha de vencimiento
+      const today = new Date();
+      const dueDate = new Date(task.dueDate);
+      const sevenDaysFromNow = new Date();
+      sevenDaysFromNow.setDate(today.getDate() + 7);
+
+      switch (this.dueDateFilter) {
+        case 'overdue':
+          return dueDate < today;
+        case 'upcoming':
+          return dueDate >= today && dueDate <= sevenDaysFromNow;
+        case 'future':
+          return dueDate > sevenDaysFromNow;
+        default:
+          return true;
+      }
     });
   }
 
@@ -511,6 +630,9 @@ export class ProjectDetailComponent implements OnInit {
         event.currentIndex
       );
     } else {
+      // Obtener la tarea antes de la transferencia
+      const taskToMove = event.previousContainer.data[event.previousIndex];
+
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -518,19 +640,20 @@ export class ProjectDetailComponent implements OnInit {
         event.currentIndex
       );
 
-      // Obtener la tarea que se movió
-      const task = event.container.data[event.currentIndex];
-
-      // Crear un objeto con solo los campos necesarios para actualizar
+      // Usar la tarea capturada anteriormente
       const updatedTask: Partial<Task> = {
         status: this.getNewStatus(event.container.id),
       };
 
-      // Actualizar el estado en el backend
-      this.taskService.updateTask(task._id, updatedTask).subscribe({
+      console.log('Tarea siendo movida:', taskToMove);
+      console.log('Nuevo estado:', updatedTask.status);
+
+      this.taskService.updateTask(taskToMove._id, updatedTask).subscribe({
+        next: () => {
+          this.loadTasks(this.project!._id);
+        },
         error: (error) => {
           console.error('Error al actualizar el estado de la tarea:', error);
-          // Revertir el cambio en caso de error
           transferArrayItem(
             event.container.data,
             event.previousContainer.data,

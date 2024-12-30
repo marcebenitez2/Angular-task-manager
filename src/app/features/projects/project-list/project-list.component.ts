@@ -1,5 +1,6 @@
 // src/app/features/projects/project-list/project-list.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -8,6 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { Project } from '../../../core/models/project.model';
 import { ProjectService } from '../../../core/services/project.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-project-list',
@@ -19,6 +24,9 @@ import { ProjectService } from '../../../core/services/project.service';
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   template: `
     <div class="projects-container">
@@ -30,8 +38,18 @@ import { ProjectService } from '../../../core/services/project.service';
         </button>
       </header>
 
+      <mat-form-field class="search-field">
+        <mat-label>Buscar proyectos</mat-label>
+        <input
+          matInput
+          [formControl]="searchControl"
+          placeholder="Escribe para buscar..."
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
       <div class="projects-grid">
-        @for (project of projects; track project._id) {
+        @for (project of filteredProjects; track project._id) {
         <mat-card
           class="project-card"
           [routerLink]="['/projects', project._id]"
@@ -126,24 +144,72 @@ import { ProjectService } from '../../../core/services/project.service';
       mat-card-actions button {
         margin-right: 8px;
       }
+
+      .search-field {
+        width: 100%;
+        margin-bottom: 20px;
+        color: white;
+      }
+
+      ::ng-deep .search-field .mat-form-field-outline {
+        color: white;
+      }
+
+      ::ng-deep .search-field .mat-form-field-label {
+        color: white;
+      }
+
+      ::ng-deep .search-field .mat-input-element {
+        color: white;
+      }
     `,
   ],
 })
-export class ProjectListComponent implements OnInit {
+export class ProjectListComponent implements OnInit, OnDestroy {
   projects: Project[] = [];
+  filteredProjects: Project[] = [];
+  searchControl = new FormControl('');
+  private destroy$ = new Subject<void>();
 
-  constructor(private projectService: ProjectService) {}
+  constructor(
+    private projectService: ProjectService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.projectService.getAllProjects().subscribe({
-      next: (projects) => {
-        this.projects = projects;
-        console.log('Proyectos cargados:', projects);
-      },
-      error: (error) => {
-        console.error('Error al cargar los proyectos:', error);
-        // Aquí podrías agregar un manejo de errores más elaborado
-      },
-    });
+    this.projects = this.route.snapshot.data['projects'];
+    this.filteredProjects = this.projects;
+    // Cargar proyectos
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((searchTerm) => {
+        this.filterProjects(searchTerm || '');
+      });
+
+    // Configurar la búsqueda en tiempo real
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((searchTerm) => {
+        this.filterProjects(searchTerm || '');
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private filterProjects(searchTerm: string): void {
+    if (!searchTerm) {
+      this.filteredProjects = this.projects;
+      return;
+    }
+
+    searchTerm = searchTerm.toLowerCase();
+    this.filteredProjects = this.projects.filter(
+      (project) =>
+        project.name.toLowerCase().includes(searchTerm) ||
+        project.description.toLowerCase().includes(searchTerm)
+    );
   }
 }
