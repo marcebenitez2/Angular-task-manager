@@ -1,4 +1,4 @@
-.login-container {
+.register-container {
   height: calc(100vh - 64px);
   display: flex;
   align-items: center;
@@ -6,10 +6,12 @@
   padding: 20px;
 }
 
-.login-card {
+.register-card {
   max-width: 400px;
   width: 100%;
   padding: 20px;
+  background-color: #1e1e1e;
+  color: #ffffff;
 }
 
 .header-content {
@@ -53,20 +55,10 @@ mat-card-subtitle {
   margin-bottom: 0;
 }
 
-.register-link {
+.login-link {
   text-align: center;
   margin-top: 20px;
   color: #cccccc;
-}
-
-.login-card {
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
-
-.mat-mdc-form-field {
-  width: 100%;
-  color: #ffffff;
 }
 
 input {

@@ -1,0 +1,28 @@
+.new-project-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  mat-card {
+    background-color: #1e1e1e;
+    color: white;
+  }
+
+  mat-card-title {
+    color: white;
+    margin-bottom: 20px;
+  }

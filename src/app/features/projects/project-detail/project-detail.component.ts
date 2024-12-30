@@ -424,6 +424,8 @@ import { MatIconModule } from '@angular/material/icon';
     }
   `,
 })
+
+
 export class ProjectDetailComponent implements OnInit {
   project?: Project;
   tasks: Task[] = [];

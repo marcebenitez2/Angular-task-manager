@@ -1,0 +1,87 @@
+.projects-container {
+    padding: 20px;
+  }
+
+  .projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h1 {
+      margin: 0;
+      color: white;
+      font-size: 24px;
+    }
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .project-card {
+    background-color: #1e1e1e;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  .project-description {
+    margin: 16px 0;
+    color: #cccccc;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  mat-card-title {
+    color: white;
+  }
+
+  mat-card-subtitle {
+    color: #cccccc;
+  }
+
+  .status-active {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  .status-completed {
+    background-color: #2196f3;
+    color: white;
+  }
+
+  .status-on-hold {
+    background-color: #ffc107;
+    color: black;
+  }
+
+  mat-card-actions button {
+    margin-right: 8px;
+  }
+
+  .search-field {
+    width: 100%;
+    margin-bottom: 20px;
+    color: white;
+  }
+
+  ::ng-deep .search-field .mat-form-field-outline {
+    color: white;
+  }
+
+  ::ng-deep .search-field .mat-form-field-label {
+    color: white;
+  }
+
+  ::ng-deep .search-field .mat-input-element {
+    color: white;
+  }

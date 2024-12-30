@@ -71,31 +71,7 @@ import { MatIconModule } from '@angular/material/icon';
       </mat-card>
     </div>
   `,
-  styles: [
-    `
-      .new-project-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-      }
-
-      mat-card {
-        width: 100%;
-        max-width: 600px;
-      }
-
-      mat-form-field.full-width {
-        width: 100%;
-      }
-
-      .actions {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-      }
-    `,
-  ],
+ styleUrl:"./project-edit.component.css"
 })
 export class ProjectEditComponent implements OnInit {
   editProject: FormGroup;

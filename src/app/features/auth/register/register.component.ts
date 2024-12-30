@@ -55,7 +55,7 @@ import { AuthService } from '../../../core/services/auth.service';
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field >
+            <mat-form-field>
               <mat-label>Email</mat-label>
               <input
                 matInput
@@ -113,80 +113,7 @@ import { AuthService } from '../../../core/services/auth.service';
       </mat-card>
     </div>
   `,
-  styles: [
-    `
-      .register-container {
-        height: calc(100vh - 64px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-      }
-
-      .register-card {
-        max-width: 400px;
-        width: 100%;
-        padding: 20px;
-        background-color: #1e1e1e;
-        color: #ffffff;
-      }
-
-      .header-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        margin-bottom: 20px;
-      }
-
-      .header-icon {
-        font-size: 48px;
-        height: 48px;
-        width: 48px;
-        margin-bottom: 16px;
-        color: var(--primary-color);
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      mat-form-field {
-        width: 100%;
-      }
-
-      .submit-button {
-        height: 48px;
-        font-size: 16px;
-        margin-top: 16px;
-      }
-
-      mat-card-title {
-        font-size: 24px;
-        margin: 8px 0;
-      }
-
-      mat-card-subtitle {
-        margin-bottom: 0;
-      }
-
-      .login-link {
-        text-align: center;
-        margin-top: 20px;
-        color: #cccccc;
-      }
-
-      input {
-        color: #ffffff !important;
-      }
-
-      mat-label {
-        color: #cccccc !important;
-      }
-    `,
-  ],
+  styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   registerForm: FormGroup;
