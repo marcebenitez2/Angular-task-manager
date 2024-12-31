@@ -11,7 +11,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       let errorMessage = 'Ha ocurrido un error';
 
-      // Personalizar mensajes según el código de error
       switch (error.status) {
         case 401:
           errorMessage = 'Email o contraseña incorrectos';

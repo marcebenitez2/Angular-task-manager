@@ -1,4 +1,3 @@
-// src/app/features/projects/projects.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from '../../core/guards/auth.guard';
 import { ProjectListResolver } from './resolvers/project-list.resolver';

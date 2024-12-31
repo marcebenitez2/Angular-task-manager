@@ -19,13 +19,11 @@ import { AuthService } from './core/services/auth.service';
   ],
   template: `
     <mat-toolbar color="primary" class="flex items-center justify-between px-4 sm:px-6 lg:px-8 toolbar">
-      <!-- Logo/Title section -->
       <div class="flex items-center">
         <span class="text-lg sm:text-xl font-medium title hidden sm:block">Project Management</span>
         <span class="text-lg sm:text-xl font-medium title sm:hidden">PM</span>
       </div>
 
-      <!-- Navigation section -->
       <div class="flex items-center space-x-2 sm:space-x-4">
         <ng-container *ngIf="isLoggedIn$ | async; else loginButton">
           <button 

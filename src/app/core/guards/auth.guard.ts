@@ -9,14 +9,12 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   if (authService.isAuthenticated()) {
     if (state.url.includes('/auth')) {
-      // Si está autenticado y trata de acceder a auth, redirigir a projects
       router.navigate(['/projects']);
       return false;
     }
     return true;
   } else {
     if (!state.url.includes('/auth')) {
-      // Si no está autenticado y trata de acceder a una ruta protegida, redirigir a login
       router.navigate(['/auth/login']);
       return false;
     }

@@ -1,4 +1,3 @@
-// src/app/features/projects/project-list/project-list.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';

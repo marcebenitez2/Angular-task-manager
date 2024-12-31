@@ -1,4 +1,3 @@
-// src/app/features/projects/project-detail/project-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {

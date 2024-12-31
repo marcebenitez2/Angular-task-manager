@@ -1,4 +1,3 @@
-// src/app/features/projects/new-project/new-project.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
