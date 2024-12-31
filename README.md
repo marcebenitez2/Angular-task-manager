@@ -1,69 +1,143 @@
-# PruebaAngular
+# Gestión de Proyectos y Tareas - Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+## 📋 Descripción
+Aplicación web desarrollada en Angular que permite la gestión de proyectos y tareas, con sistema de autenticación de usuarios, drag and drop para tareas, y múltiples funcionalidades para la administración de proyectos.
 
-## Development server
+## ✨ Características Principales
+- Sistema de autenticación completo (registro, login, logout)
+- Gestión de proyectos (CRUD)
+- Sistema de tareas con drag and drop
+- Filtros y búsqueda en tiempo real
+- Interfaz responsiva con Angular Material
+- Protección de rutas
+- Manejo de estado con RxJS
+- Conexión a API REST en producción
 
-To start a local development server, run:
+## 🛠️ Tecnologías
+- Angular (última versión)
+- Angular Material
+- RxJS
+- TailwindCSS
+- TypeScript
+- Angular CDK (Drag and Drop)
 
+## 📦 Instalación
+
+1. Clonar el repositorio
+```bash
+git clone https://github.com/marcebenitez2/Angular-task-manager.git
+```
+
+2. Instalar dependencias
+```bash
+npm install
+```
+
+3. Iniciar servidor de desarrollo
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+4. Navegar a `http://localhost:4200/`
 
-## Code scaffolding
+## 🌐 Configuración de API
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Desarrollo
+Por defecto, la aplicación se conectará al servidor local de desarrollo.
 
-```bash
-ng generate component component-name
+### Producción
+La aplicación está configurada para conectarse a la API de producción:
+```
+https://api-rest-task-manager.netlify.app
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🚀 Scripts Disponibles
 
 ```bash
-ng generate --help
+# Desarrollo
+npm run start
+
+# Construcción
+npm run build
+
+# Testing
+npm run test
 ```
 
-## Building
+## 📁 Estructura del Proyecto
 
-To build the project run:
-
-```bash
-ng build
+```
+src/
+├── app/
+│   ├── core/               # Servicios, guardias e interceptores
+│   ├── features/          # Módulos principales
+│   │   ├── auth/         # Autenticación
+│   │   ├── projects/     # Gestión de proyectos
+│   │   └── tasks/        # Gestión de tareas
+│   └── shared/           # Componentes compartidos
+├── environments/          # Configuración de entornos
+└── assets/               # Recursos estáticos
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🔒 Funcionalidades de Autenticación
 
-## Running unit tests
+- Registro de usuarios
+- Login con JWT
+- Guard para rutas protegidas
+- Interceptor para tokens
+- Manejo de sesión
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 📊 Gestión de Proyectos
 
-```bash
-ng test
-```
+- Listado de proyectos
+- Creación y edición
+- Detalles del proyecto
+- Asignación de usuarios
+- Filtros y búsqueda
 
-## Running end-to-end tests
+## ✅ Gestión de Tareas
 
-For end-to-end (e2e) testing, run:
+- Tablero con columnas de estado
+- Drag and drop para cambiar estado
+- Filtros por múltiples criterios
+- Edición rápida mediante diálogo
+- Asignación de usuarios
 
-```bash
-ng e2e
-```
+## 🔍 Testing
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- Pruebas unitarias con Jasmine
+- Testing de componentes con TestBed
 
-## Additional Resources
+## 📱 Optimización
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Lazy loading de módulos
+- Estrategia OnPush
+- Interceptores para manejo de errores
+- Manejo eficiente de estado
 
+## 🚀 Despliegue
+
+El proyecto fue desplegado en:
+- Netlify
+
+## 👤 Autor
+
+Marcelo Benitez
+- GitHub: marcebenitez2
+- LinkedIn: [marcebenitez2](https://www.linkedin.com/in/benitez-marcelo/)
 
 ```
 prueba-angular
 ├─ .angular
 ├─ .editorconfig
 ├─ angular.json
+├─ cypress
+│  ├─ downloads
+│  ├─ e2e
+│  │  ├─ 1-getting-started
+│  │  └─ 2-advanced-examples
+│  ├─ fixtures
+│  └─ support
 ├─ package-lock.json
 ├─ package.json
 ├─ public
@@ -81,14 +155,19 @@ prueba-angular
 │  │  │  ├─ guards
 │  │  │  │  └─ auth.guard.ts
 │  │  │  ├─ interceptors
-│  │  │  │  └─ auth.interceptor.ts
+│  │  │  │  ├─ auth.interceptor.ts
+│  │  │  │  └─ error.interceptor.ts
 │  │  │  ├─ models
 │  │  │  │  ├─ auth.model.ts
-│  │  │  │  └─ project.model.ts
+│  │  │  │  ├─ project.model.ts
+│  │  │  │  ├─ task.model.ts
+│  │  │  │  └─ user.model.ts
 │  │  │  └─ services
 │  │  │     ├─ auth.service.spec.ts
 │  │  │     ├─ auth.service.ts
-│  │  │     └─ project.service.ts
+│  │  │     ├─ project.service.ts
+│  │  │     ├─ task.service.ts
+│  │  │     └─ users.service.ts
 │  │  ├─ features
 │  │  │  ├─ auth
 │  │  │  │  ├─ auth.routes.ts
@@ -97,15 +176,33 @@ prueba-angular
 │  │  │  │  │  ├─ login.component.spec.ts
 │  │  │  │  │  └─ login.component.ts
 │  │  │  │  └─ register
+│  │  │  │     ├─ register.component.css
+│  │  │  │     ├─ register.component.spect.ts
 │  │  │  │     └─ register.component.ts
-│  │  │  └─ projects
-│  │  │     ├─ project-form
-│  │  │     │  └─ project-form.component.ts
-│  │  │     ├─ project-list
-│  │  │     │  ├─ project-list.component.css
-│  │  │     │  ├─ project-list.component.spec.ts
-│  │  │     │  └─ project-list.component.ts
-│  │  │     └─ projects.routes.ts
+│  │  │  ├─ projects
+│  │  │  │  ├─ project-detail
+│  │  │  │  │  └─ project-detail.component.ts
+│  │  │  │  ├─ project-edit
+│  │  │  │  │  ├─ project-edit.component.css
+│  │  │  │  │  └─ project-edit.component.ts
+│  │  │  │  ├─ project-form
+│  │  │  │  │  ├─ project-form.component.css
+│  │  │  │  │  └─ project-form.component.ts
+│  │  │  │  ├─ project-header
+│  │  │  │  ├─ project-list
+│  │  │  │  │  ├─ project-list.component.css
+│  │  │  │  │  ├─ project-list.component.spec.ts
+│  │  │  │  │  └─ project-list.component.ts
+│  │  │  │  ├─ projects.routes.ts
+│  │  │  │  └─ resolvers
+│  │  │  │     └─ project-list.resolver.ts
+│  │  │  └─ tasks
+│  │  │     ├─ task-card
+│  │  │     ├─ task-column
+│  │  │     ├─ task-edit-dialog
+│  │  │     │  └─ task-edit-dialog.component.ts
+│  │  │     ├─ task-filter
+│  │  │     └─ task-form
 │  │  └─ shared
 │  │     └─ not-found
 │  │        ├─ not-found.component.css
@@ -116,9 +213,10 @@ prueba-angular
 │  │  └─ environment.ts
 │  ├─ index.html
 │  ├─ main.ts
-│  └─ styles.css
+│  ├─ styles.css
+│  └─ _redirects
+├─ tailwind.config.js
 ├─ tsconfig.app.json
 ├─ tsconfig.json
 └─ tsconfig.spec.json
-
 ```
